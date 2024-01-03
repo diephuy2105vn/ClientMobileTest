@@ -37,6 +37,7 @@ export const AuthProvider = ({ children }) => {
                 const token = await AsyncStorage.getItem("accessToken");
                 if (token) {
                     const res = await instance.post("/auth/refresh");
+
                     resolve(res);
                 }
                 reject();
@@ -50,6 +51,7 @@ export const AuthProvider = ({ children }) => {
         return new Promise(async (resolve, reject) => {
             try {
                 const res = await instance.post("/auth/logout");
+                await AsyncStorage.removeItem("accessToken");
                 resolve(res);
             } catch (err) {
                 reject(err);

@@ -43,7 +43,6 @@ export const getCart = (id) => (dispatch) => {
 };
 
 export const addDetail = (id, data) => (dispatch) => {
-    console.log("addDetail", id, data);
     return dispatch(
         apiCallBegan({
             url: `/${id}`,

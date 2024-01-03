@@ -13,13 +13,14 @@ const middleware =
 
         try {
             if (!method || method === "GET") {
-                const res = await instance.get(`/cart/${url}`);
+                const res = await instance.get(`cart/${url}`);
                 dispatch(actions.apiCallSucess(res.data));
+
                 if (onSuccess) dispatch({ type: onSuccess, payload: res.data });
                 return;
             }
             const res = await axios.request({
-                baseURL: "http://192.168.1.11:8080/cart",
+                baseURL: "http://10.13.130.154:8080/cart",
                 url,
                 method,
                 data: { data: data },
@@ -29,7 +30,6 @@ const middleware =
             dispatch(actions.apiCallSucess(res.data));
             if (onSuccess) dispatch({ type: onSuccess, payload: res.data });
         } catch (error) {
-            console.log(error.message);
             dispatch(actions.apiCallFailed(error.message));
             if (onError) dispatch({ type: onError, payload: error.message });
         }

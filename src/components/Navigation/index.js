@@ -3,7 +3,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
-    faGear,
     faUser,
     faHouse,
     faCartShopping,
@@ -18,14 +17,14 @@ import {
     TextInput,
     TouchableHighlight,
 } from "react-native";
+
 import HomeScreen from "../pages/Home";
 import ProductOneScreen from "../pages/ProductOne";
 import CartScreen from "../pages/Cart";
+import UserScreen from "../pages/User";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import { useDispatch } from "react-redux";
-import { getCart } from "../../reduxs/cart";
-
+import OrderScreen from "../pages/Order";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -72,7 +71,7 @@ const PrivateStack = () => {
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
-                tabBarIcon: ({ focused, color, size }) => {
+                tabBarIcon: ({ color, size }) => {
                     let icon;
 
                     if (route.name === "Home") {
@@ -83,9 +82,6 @@ const PrivateStack = () => {
                     }
                     if (route.name === "User") {
                         icon = faUser;
-                    }
-                    if (route.name === "Setting") {
-                        icon = faGear;
                     }
                     return (
                         <FontAwesomeIcon
@@ -101,17 +97,15 @@ const PrivateStack = () => {
                 tabBarShowLabel: false,
                 tabBarActiveTintColor: "#bf1459",
                 tabBarInactiveTintColor: "black",
-                header: (props) => <CustomHeader />,
+                headerShown: false,
             })}>
             <Tab.Screen name="Home" component={HomeStack} />
             <Tab.Screen name="Cart" component={CartScreen} />
-            <Tab.Screen name="User" component={HomeScreen} />
-            <Tab.Screen name="Setting" component={HomeStack} />
+            <Tab.Screen name="User" component={UserScreen} />
         </Tab.Navigator>
     );
 };
 const Navigation = () => {
-    const dispatch = useDispatch();
     const { user, setUser, refresh } = useContext(AuthContext);
     useEffect(() => {
         refresh()
@@ -123,7 +117,15 @@ const Navigation = () => {
 
     return (
         <NavigationContainer>
-            {user ? <PrivateStack /> : <AuthStack />}
+            {user ? (
+                <Stack.Navigator
+                    screenOptions={{ header: (props) => <CustomHeader /> }}>
+                    <Stack.Screen name="Tabs" component={PrivateStack} />
+                    <Stack.Screen name="Order" component={OrderScreen} />
+                </Stack.Navigator>
+            ) : (
+                <AuthStack />
+            )}
         </NavigationContainer>
     );
 };
@@ -156,6 +158,10 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         padding: 8,
+    },
+    container: {
+        height: "100%",
+        width: "100%",
     },
 });
 

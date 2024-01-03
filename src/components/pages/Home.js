@@ -21,6 +21,8 @@ import instance from "../../axios";
 import banner1 from "../../../assets/Banner/hinh1.jpg";
 import banner2 from "../../../assets/Banner/hinh2.jpg";
 import banner3 from "../../../assets/Banner/hinh3.jpg";
+import { getCart } from "../../reduxs/cart";
+import { useDispatch } from "react-redux";
 import { useContext } from "react";
 import AuthContext from "../../context/authContext";
 const Item = ({ item }) => (
@@ -68,6 +70,7 @@ const types = [
 ];
 
 function HomeScreen({ navigation }) {
+    const { user } = useContext(AuthContext);
     const [productTrends, setProductTrends] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
@@ -83,7 +86,10 @@ function HomeScreen({ navigation }) {
                 setProductTrends((pre) => [...pre, ...res.data.data]);
             });
     }, [currentPage, typeActive]);
-
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getCart(user._id));
+    }, []);
     return (
         <ScrollView
             style={styles.container}

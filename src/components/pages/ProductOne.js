@@ -8,13 +8,19 @@ import {
 } from "react-native";
 import Swiper from "react-native-swiper";
 import { useDispatch } from "react-redux";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../context/authContext";
-import { addDetail } from "../../reduxs/cart";
-function ProductOneScreen({ route }) {
+import { addDetail, getCart } from "../../reduxs/cart";
+import InputNumber from "../InputNumber";
+function ProductOneScreen({ route, navigation }) {
     const { product } = route.params;
     const { user } = useContext(AuthContext);
+    const [detail, setDetail] = useState({
+        product: product,
+        quantity: 1,
+    });
     const dispatch = useDispatch();
+
     return (
         <ScrollView
             style={{
@@ -54,6 +60,18 @@ function ProductOneScreen({ route }) {
                         {product.quantity} sản phẩm
                     </Text>
                 </View>
+
+                <View style={{ width: 100, display: "flex" }}>
+                    <InputNumber
+                        value={detail.quantity}
+                        onChangeText={(text) =>
+                            setDetail((pre) => ({
+                                ...pre,
+                                quantity: Number(text),
+                            }))
+                        }
+                    />
+                </View>
                 <View
                     style={{
                         display: "flex",
@@ -70,7 +88,11 @@ function ProductOneScreen({ route }) {
                             backgroundColor: "#bf1459",
                             padding: 8,
                         }}
-                        onPress={() => {}}
+                        onPress={() => {
+                            navigation.navigate("Order", {
+                                orderDetails: [detail],
+                            });
+                        }}
                         activeOpacity={0.8}
                         underlayColor="none">
                         <Text
@@ -94,7 +116,6 @@ function ProductOneScreen({ route }) {
                             padding: 8,
                         }}
                         onPress={() => {
-                            console.log("Them vao gio");
                             return dispatch(
                                 addDetail(user._id, {
                                     product: product,

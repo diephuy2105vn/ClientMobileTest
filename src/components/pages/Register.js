@@ -67,6 +67,7 @@ function RegisterScreen({ navigation }) {
                                 password: text,
                             }))
                         }
+                        secureTextEntry={true}
                         style={styles.formInput}
                     />
                     <TextInput
@@ -78,6 +79,7 @@ function RegisterScreen({ navigation }) {
                                 passwordConfirm: text,
                             }))
                         }
+                        secureTextEntry={true}
                         style={{ ...styles.formInput, marginBottom: 30 }}
                     />
                     <TouchableHighlight
